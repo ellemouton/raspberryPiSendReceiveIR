@@ -9,13 +9,6 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(LED_PIN, GPIO.OUT)
 
-
-#start command
-GPIO.output(22, True)
-time.sleep(0.009)
-GPIO.output(22,False)
-time.sleep(0.0045)
-
 toSend = []
 
 for i in range (0, 250):
@@ -24,6 +17,13 @@ for i in range (0, 250):
 	#for j in range(0,i):
 	toSend.append(0.0005)
 print(len(toSend))
+
+
+#start command
+GPIO.output(22, True)
+time.sleep(0.009)
+GPIO.output(22,False)
+time.sleep(0.0045)
 
 for i in toSend:
 	GPIO.output(22, True)
