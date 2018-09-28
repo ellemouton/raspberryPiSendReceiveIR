@@ -4,9 +4,11 @@ import time
 import sys
 from datetime import datetime
 from time import sleep
+import pigpio
 
 LED_PIN = 22
 INPUT_WIRE =3
+MOD_WIRE = 18
 
 global entireFile
 global separate
@@ -115,10 +117,17 @@ def checkReply():
 	else:
 		return False
 
+def startModulating():
+	pi = pigpio.pi()
+	pi.set_mode(MOD_WIRE, pigpio.OUTPUT)
+	pi.hardware_PWM(MOD_WIRE,38000,500000)
+
 
 def main():
 	global entireFile
 	global separate
+
+	startModulating()
 
 	while True:
 		if readFromFile():
