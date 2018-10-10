@@ -52,18 +52,18 @@ def resendSignal():
 		resendCount+=1
 		time.sleep(0.2) #changed from 0.5
 		GPIO.output(LED_PIN, True)
-		time.sleep(0.005)
+		time.sleep(0.0025)
 		GPIO.output(LED_PIN,False)
-		time.sleep(0.009)
+		time.sleep(0.0045)
 		print("resend")
 
 def signalCorrect():
 		print("correct") #changed from 0.5
-		time.sleep(0.5)
+		time.sleep(0.2)
 		GPIO.output(LED_PIN, True)
-		time.sleep(0.002)
+		time.sleep(0.001)
 		GPIO.output(LED_PIN,False)
-		time.sleep(0.009)
+		time.sleep(0.0045)
 
 def main():
 	global songEndCounter
@@ -99,7 +99,7 @@ def main():
 
 				command.append((previousVal, pulseLength.microseconds))
 
-				if pulseLength.microseconds>90000:
+				if pulseLength.microseconds>20000:
 					break
 
 			previousVal = value
@@ -111,7 +111,7 @@ def main():
 
 		for (val, pulse) in command[2:len(command)-1]:
 			if val == 1:
-				if pulse>1000:
+				if pulse>550:
 					commandCut+="1"
 				else:
 					commandCut+="0"

@@ -12,7 +12,6 @@ LED_PIN = 27
 
 global songEndCounter
 global song
-global resendCount
 
 def setup():
 	global songEndCounter
@@ -36,8 +35,7 @@ def sendToFile():
 	#construct string for text file
 	exportString = "["+",".join(song[0:len(song)-3])+"]"
 	print(exportString)
-	print("number of resends:")
-	print(resendCount)
+
 	#write to text file
 	f = open('interface2.txt','w')
 	f.write(exportString)
@@ -46,11 +44,7 @@ def sendToFile():
 	songEndCounter = 0
 
 def resendSignal():
-
-		global resendCount
-
-		resendCount+=1
-		time.sleep(0.2) #changed from 0.5
+		time.sleep(0.5)
 		GPIO.output(LED_PIN, True)
 		time.sleep(0.005)
 		GPIO.output(LED_PIN,False)
@@ -58,7 +52,7 @@ def resendSignal():
 		print("resend")
 
 def signalCorrect():
-		print("correct") #changed from 0.5
+		print("correct")
 		time.sleep(0.5)
 		GPIO.output(LED_PIN, True)
 		time.sleep(0.002)
@@ -68,9 +62,6 @@ def signalCorrect():
 def main():
 	global songEndCounter
 	global song
-	global resendCount
-
-	resendCount = 0
 
 	while True:
 		value = 1

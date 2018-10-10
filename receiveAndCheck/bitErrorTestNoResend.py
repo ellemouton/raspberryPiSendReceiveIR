@@ -52,18 +52,18 @@ def resendSignal():
 		resendCount+=1
 		time.sleep(0.2) #changed from 0.5
 		GPIO.output(LED_PIN, True)
-		time.sleep(0.005)
+		time.sleep(0.0025)
 		GPIO.output(LED_PIN,False)
-		time.sleep(0.009)
+		time.sleep(0.0045)
 		print("resend")
 
 def signalCorrect():
 		print("correct") #changed from 0.5
-		time.sleep(0.5)
+		time.sleep(0.2)
 		GPIO.output(LED_PIN, True)
-		time.sleep(0.002)
+		time.sleep(0.001)
 		GPIO.output(LED_PIN,False)
-		time.sleep(0.009)
+		time.sleep(0.0045)
 
 def main():
 	global songEndCounter
@@ -99,7 +99,7 @@ def main():
 
 				command.append((previousVal, pulseLength.microseconds))
 
-				if pulseLength.microseconds>90000:
+				if pulseLength.microseconds>20000:
 					break
 
 			previousVal = value
@@ -111,47 +111,46 @@ def main():
 
 		for (val, pulse) in command[2:len(command)-1]:
 			if val == 1:
-				if pulse>1000:
+				if pulse>550:
 					commandCut+="1"
 				else:
 					commandCut+="0"
 
 		#split into groups of 8 (bytes)
-		if(len(commandCut)%8==0):
-			bytes = np.array_split(list(commandCut), len(commandCut)/8)
+		#if(len(commandCut)%8==0):
+		bytes = np.array_split(list(commandCut), len(commandCut)/8)
 
 			#construct string for text file
-			received = []
+		received = []
 
-			for b in bytes:
-				received.append(int("".join(b),2))
+		for b in bytes:
+			received.append(int("".join(b),2))
 
 
-			correctLen = received[len(received)-2]
-			correcthashVal = int(received[len(received)-1])
+		correctLen = received[len(received)-2]
+		correcthashVal = int(received[len(received)-1])
 
-			hashVal = hash(str(received[0:len(received)-2]))%255; #change this
+		hashVal = hash(str(received[0:len(received)-2]))%255; #change this
 
-			if ((correctLen!=(len(received)-2)) or (correcthashVal!=hashVal)):
+			#if ((correctLen!=(len(received)-2)) or (correcthashVal!=hashVal)):
 				#resend
-				resendSignal()
+			#	resendSignal()
 
-			else:
+			#else:
 
-				for i in received[0:int(correctLen)]:
-					song.append(str(i))
-					if i==255:
-						songEndCounter+=1;
-				if songEndCounter==3:
-					sendToFile()
-					print("sent to file")
+		for i in received[0:int(correctLen)]:
+			song.append(str(i))
+			if i==255:
+				songEndCounter+=1;
+		if songEndCounter==3:
+			sendToFile()
+			print("sent to file")
+		signalCorrect()
 
-				signalCorrect()
 
-
-		else:
-			print("error: not a multiple of 8")
-			resendSignal()
+		#else:
+		#	print("error: not a multiple of 8")
+		#	resendSignal()
 
 
 
